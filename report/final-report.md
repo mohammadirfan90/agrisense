@@ -271,73 +271,48 @@ The circuit diagram below details the electrical connections between the ESP32, 
 ### 6.3 Flowchart
 The flowchart below maps the logic flow of the firmware, showing the setup phase, sensor updates, auto-watering decisions, and safety watchdogs.
 
-```text
-  [ Power On ]
-        |
-        v
-  [ Init Logging, Display, Sensors & Relay ]
-        |
-        v
-  [ Connect Wi-Fi (AP Mode Fallback if timed out) ]
-        |
-        v
-  [ Mount LittleFS & Start HTTP Web Server on Port 80 ]
-        |
-        v
-  +---> [ Core Execution Loop ]
-  |     |
-  |     v
-  |  [ Update Sensors, Wi-Fi status, Watchdog, & Web Client ]
-  |     |
-  |     v
-  |  [ Is Telemetry Interval Elapsed (1 second)? ]
-  |     |
-  |     +---> (No)  ---+
-  |     | (Yes)        |
-  |     v              v
-  |  [ Read active sensor values & check safety errors ]
-  |     |
-  |     v
-  |  [ Sensor Fault Active? ]
-  |     |
-  |     +---> (Yes) ---> [ Stop Pump, Show Error ] -------+
-  |     | (No)                                           |
-  |     v                                                |
-  |  [ Pump Run Watchdog Triggered (>30s)? ]             |
-  |     |                                                |
-  |     +---> (Yes) ---> [ Stop Pump, Watchdog Error ] --+
-  |     | (No)                                           |
-  |     v                                                |
-  |  [ Operating Mode == AUTO? ]                         |
-  |     |                                                |
-  |     +---> (No)  ---> [ Read Manual Web Commands ] --+
-  |     | (Yes)                                          |
-  |     v                                                |
-  |  [ Pump ON? ]                                        |
-  |     |                                                |
-  |     +---> (Yes) ---> [ Moisture >= 70% OR Rain? ]    |
-  |     |                      |                         |
-  |     |                      +---> (Yes) -> [ Pump OFF]|
-  |     |                      +---> (No)  -> [ Keep ON ]|
-  |     |                                                |
-  |     +---> (No)  ---> [ Moisture < 30% AND Dry? ]     |
-  |                            |                         |
-  |                            +---> (Yes) -> [ Pump ON ]|
-  |                            +---> (No)  -> [ Keep OFF]|
-  |                                                      |
-  |     +------------------------------------------------+
-  |     |
-  |     v
-  |  [ Is OLED Refresh Interval Elapsed (1 second)? ]
-  |     |
-  |     +---> (Yes) ---> [ Refresh OLED Telemetry Screen ]
-  |     +---> (No)  ---> [ Continue Loop ]
-  |     |
-  +-----+
-
-================================================================================
-                           Figure 2. System Flowchart
-================================================================================
+```mermaid
+flowchart TD
+    PowerOn([Power On]) --> Init[Init Logging, Display, Sensors & Relay]
+    Init --> ConnectWifi["Connect Wi-Fi (AP Mode Fallback on timeout)"]
+    ConnectWifi --> MountFS["Mount LittleFS & Start HTTP Web Server (Port 80)"]
+    MountFS --> LoopStart["Core Execution Loop"]
+    
+    LoopStart --> UpdateDrivers["Update Sensors, Wi-Fi status, Watchdog, & Web Client"]
+    UpdateDrivers --> CheckInterval{"Is Telemetry Interval<br>Elapsed (1 second)?"}
+    
+    CheckInterval -- No --> CheckOLED
+    CheckInterval -- Yes --> ReadSensors["Read active sensor values & check safety errors"]
+    
+    ReadSensors --> CheckFault{"Sensor Fault Active?"}
+    CheckFault -- Yes --> StopFault["Stop Pump, Show Error"] --> CheckOLED
+    CheckFault -- No --> CheckWatchdog{"Pump Run Watchdog<br>Triggered (>30s)?"}
+    
+    CheckWatchdog -- Yes --> StopWatchdog["Stop Pump, Watchdog Error"] --> CheckOLED
+    CheckWatchdog -- No --> CheckMode{"Operating Mode == AUTO?"}
+    
+    CheckMode -- No --> ReadManual["Read Manual Web Commands"] --> CheckOLED
+    
+    CheckMode -- Yes --> CheckPump{"Pump ON?"}
+    
+    CheckPump -- Yes --> CheckAutoOff{"Moisture >= 70% OR Rain?"}
+    CheckAutoOff -- Yes --> PumpOff["Pump OFF"]
+    CheckAutoOff -- No --> KeepOn["Keep ON"]
+    
+    CheckPump -- No --> CheckAutoOn{"Moisture < 30% AND Dry?"}
+    CheckAutoOn -- Yes --> PumpOn["Pump ON"]
+    CheckAutoOn -- No --> KeepOff["Keep OFF"]
+    
+    PumpOff --> CheckOLED
+    KeepOn --> CheckOLED
+    PumpOn --> CheckOLED
+    KeepOff --> CheckOLED
+    
+    CheckOLED{"Is OLED Refresh Interval<br>Elapsed (1 second)?"}
+    CheckOLED -- Yes --> RefreshOLED["Refresh OLED Telemetry Screen"] --> LoopEnd
+    CheckOLED -- No --> LoopEnd["Continue Loop"]
+    
+    LoopEnd --> LoopStart
 ```
 
 ### 6.4 System Workflow
