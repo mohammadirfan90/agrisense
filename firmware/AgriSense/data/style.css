@@ -1,0 +1,607 @@
+/* CSS Variables for Apple-Inspired Light Mode */
+:root {
+    --bg-primary: #f5f5f7;
+    --bg-card: #ffffff;
+    
+    --text-primary: #1d1d1f;
+    --text-secondary: #86868b;
+    --text-muted: #aeaeae;
+    
+    --accent-blue: #0071e3;
+    --accent-blue-light: #f2f8fc;
+    --accent-green: #34c759;
+    --accent-green-bold: #1a7f37;
+    --accent-green-light: #f4fbf6;
+    --accent-orange: #ff9500;
+    --accent-orange-light: #fffaf0;
+    --accent-yellow: #d18d00;
+    --accent-yellow-light: #fffcf0;
+    --accent-teal: #00a0b0;
+    --accent-teal-light: #f0fbfd;
+    --accent-red: #ff3b30;
+    --accent-red-light: #fff5f5;
+    
+    --border-color: #e5e5ea;
+    --border-hover: #d1d1d6;
+    --focus-ring: rgba(0, 113, 227, 0.4);
+    
+    --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    
+    --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+    --hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+/* Reset & Core Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-stack);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.47059;
+    font-weight: 400;
+    letter-spacing: -0.022em;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 40px;
+}
+
+/* App Header */
+.app-header {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: saturate(180%) blur(20px); /* Clean Apple standard, not glassmorphism on cards */
+}
+
+.header-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo-icon {
+    width: 24px;
+    height: 24px;
+    color: var(--accent-blue);
+}
+
+.logo-text {
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    color: var(--text-primary);
+}
+
+/* Badges */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.badge-connecting {
+    background-color: var(--accent-yellow-light);
+    color: var(--accent-yellow);
+}
+.badge-connecting .badge-dot {
+    background-color: var(--accent-yellow);
+    animation: pulse 1.2s infinite ease-in-out;
+}
+
+.badge-online {
+    background-color: var(--accent-green-light);
+    color: var(--accent-green-bold);
+}
+.badge-online .badge-dot {
+    background-color: var(--accent-green);
+}
+
+.badge-offline {
+    background-color: var(--accent-red-light);
+    color: var(--accent-red);
+}
+.badge-offline .badge-dot {
+    background-color: var(--accent-red);
+}
+
+/* Main Dashboard Container */
+.dashboard-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Solid Apple-style Card Base */
+.control-card, .sensor-card, .info-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+    box-shadow: var(--card-shadow);
+    padding: 24px;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.25, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.25, 1);
+}
+
+.control-card:hover, .sensor-card:hover, .info-card:hover {
+    box-shadow: var(--hover-shadow);
+}
+
+/* Card Header */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.card-header h2 {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+.status-indicator {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+/* Control Layout Grid */
+.control-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+}
+
+@media (min-width: 600px) {
+    .control-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.control-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Segmented Control (iOS style) */
+.segmented-control {
+    background-color: #f2f2f7;
+    border-radius: 10px;
+    padding: 3px;
+    display: flex;
+    width: 100%;
+}
+
+.segment-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    padding: 10px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.12s, color 0.12s, box-shadow 0.12s;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.segment-btn.active {
+    background-color: #ffffff;
+    color: var(--text-primary);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.02);
+    font-weight: 600;
+}
+
+/* Pump Controller Elements */
+.pump-toggle-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.pump-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 12px;
+    height: 48px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.18s, color 0.18s, border-color 0.18s, box-shadow 0.18s;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Pump Button States */
+.pump-btn.off {
+    background-color: var(--accent-red);
+    border-color: var(--accent-red);
+    color: #ffffff;
+}
+
+.pump-btn.off:hover {
+    background-color: #e02d22;
+    border-color: #e02d22;
+}
+
+.pump-btn.on {
+    background-color: var(--accent-green);
+    border-color: var(--accent-green);
+    color: #ffffff;
+    animation: pumpPulse 2s infinite ease-in-out;
+}
+
+.pump-btn.on:hover {
+    background-color: var(--accent-green-bold);
+    border-color: var(--accent-green-bold);
+}
+
+.pump-btn.disabled-control {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+    pointer-events: none;
+}
+
+.btn-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.field-hint {
+    font-size: 11.5px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+/* Warning Alerts Banner */
+.alert-banner {
+    display: flex;
+    background-color: var(--accent-red-light);
+    border: 1px solid rgba(255, 59, 48, 0.2);
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-top: 5px;
+    align-items: center;
+    transition: opacity 0.3s ease;
+}
+
+.alert-banner.hidden {
+    display: none;
+}
+
+.alert-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.alert-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--accent-red);
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.alert-text {
+    font-size: 13.5px;
+    color: #8a1f11;
+    line-height: 1.4;
+}
+
+.alert-text strong {
+    display: block;
+    font-weight: 600;
+}
+
+/* Primary Telemetry Grid */
+.telemetry-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+@media (min-width: 480px) {
+    .telemetry-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 900px) {
+    .telemetry-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Sensor Card Sub-Elements */
+.sensor-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 190px;
+}
+
+.sensor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.sensor-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.sensor-icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* Specific Sensor Styling */
+.highlight-card {
+    border-color: rgba(0, 113, 227, 0.25);
+    background-color: #fafbfc;
+}
+
+/* Soil Moisture Card Circular Progress */
+.moisture-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 12px 0;
+}
+
+.progress-ring-wrapper {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress-ring {
+    transform: rotate(-90deg);
+}
+
+.progress-ring-bg {
+    stroke: #f2f2f7;
+}
+
+.progress-ring-bar {
+    transition: stroke-dashoffset 0.4s ease-out;
+}
+
+.progress-ring-value {
+    position: absolute;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+}
+
+.value-text {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.04em;
+}
+
+.unit-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-left: 2px;
+}
+
+/* Air Climate layout */
+.climate-display {
+    margin: auto 0;
+    padding: 16px 0;
+}
+
+.climate-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.climate-item {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.climate-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    margin-bottom: 4px;
+}
+
+.climate-value-group {
+    display: flex;
+    align-items: baseline;
+}
+
+.climate-value-group .value-text {
+    font-size: 26px;
+}
+
+.climate-divider {
+    width: 1px;
+    height: 38px;
+    background-color: var(--border-color);
+    margin: 0 16px;
+}
+
+/* Basic displays for Lux & Rain */
+.lux-display, .rain-display {
+    margin: auto 0;
+    padding: 18px 0;
+}
+
+.value-large {
+    display: flex;
+    align-items: baseline;
+}
+
+.value-large .value-text {
+    font-size: 36px;
+    letter-spacing: -0.04em;
+}
+
+/* Card Status Footer */
+.sensor-footer {
+    margin-top: 12px;
+}
+
+.status-pill {
+    display: inline-flex;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+/* Color palettes for badges and status pills */
+.text-blue { color: var(--accent-blue); }
+.bg-blue-light { background-color: var(--accent-blue-light); }
+
+.text-orange { color: var(--accent-orange); }
+.bg-orange-light { background-color: var(--accent-orange-light); }
+
+.text-yellow { color: var(--accent-yellow); }
+.bg-yellow-light { background-color: var(--accent-yellow-light); }
+
+.text-teal { color: var(--accent-teal); }
+.bg-teal-light { background-color: var(--accent-teal-light); }
+
+/* Secondary Information Card */
+.info-section {
+    width: 100%;
+}
+
+.info-card h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f2f2f7;
+    font-size: 14px;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.info-label {
+    color: var(--text-secondary);
+}
+
+.info-value {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.text-green-bold {
+    color: var(--accent-green-bold);
+    font-weight: 600;
+}
+
+/* Web App Footer */
+.app-footer {
+    margin-top: 40px;
+    text-align: center;
+    padding: 24px 20px;
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.footer-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Animation Utilities */
+@keyframes pulse {
+    0% { opacity: 0.4; }
+    50% { opacity: 1; }
+    100% { opacity: 0.4; }
+}
+
+@keyframes pumpPulse {
+    0% { box-shadow: 0 0 0 0 rgba(52, 199, 89, 0.4); }
+    70% { box-shadow: 0 0 0 8px rgba(52, 199, 89, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(52, 199, 89, 0); }
+}
+
+@keyframes alertPulse {
+    0% { border-color: rgba(255, 59, 48, 0.2); }
+    50% { border-color: rgba(255, 59, 48, 0.5); }
+    100% { border-color: rgba(255, 59, 48, 0.2); }
+}
+
+.alert-banner:not(.hidden) {
+    animation: alertPulse 2s infinite ease-in-out;
+}
